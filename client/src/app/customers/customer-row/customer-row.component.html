@@ -1,0 +1,40 @@
+<form [formGroup]="customerForm" class="row border-bottom mb-1">
+
+  <div class="col"> {{rowNum+1}}</div>
+
+  <div class="col"><input type="text" formControlName="first_name" form="customersForm"></div>
+  <div class="col"><input type="text" formControlName="last_name" form="customersForm"></div>
+  <div class="col"><input type="text" formControlName="phone" form="customersForm"></div>
+  <div class="col"><input type="email" formControlName="email" form="customersForm"></div>
+  <div class="col text-end">
+    <button *ngIf="!this.editState" (click)="handleEdit(customer,false)" class="btn btn-primary me-1 mb-1"
+      form="cusromersForm"><i class="bi bi-pencil-fill"></i></button>
+      <button [disabled]="!customerForm.valid" *ngIf="this.editState" data-bs-toggle="modal"  [attr.data-bs-target]="'#exampleModal'+customer.id" class="btn btn-success me-1 mb-1"
+      form="cusromersForm"><i class="bi bi-pencil-fill"></i></button>
+
+    <button data-bs-toggle="modal"  [attr.data-bs-target]="'#exampleModal'+customer.id" class="btn btn-primary mb-1" form="cusromersForm"><i
+        class="bi bi-trash3-fill"></i></button>
+  </div>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" [attr.id]="'exampleModal'+customer.id" tabindex="-1" [attr.aria-labelledby]="'exampleModalLabel'+customer.id" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" [attr.id]="'exampleModalLabel'+customer.id">Edit Customer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to <span *ngIf="this.alertState==='edit'">edit</span><span *ngIf="this.alertState==='delete'"> delete </span> customer id {{customer.id}} </div>
+      <div *ngIf="this.alertState==='edit'" class="modal-footer">
+        <button (click)="handleEdit(customer,false)" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button (click)="handleEdit(customer, true)" type="button"  data-bs-dismiss="modal" class="btn btn-primary">Yes</button>
+      </div>
+      <div *ngIf="this.alertState==='delete'" class="modal-footer">
+        <button (click)="handleDelete(customer,false)" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button (click)="handleDelete(customer, true)" type="button"  data-bs-dismiss="modal" class="btn btn-primary">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+$border-radius: 30px;
+span.deleteicon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    input {
+        padding-right: 18px;
+        box-sizing: border-box;
+    }
+    i {
+        position: absolute;
+        display: block;
+        right: 7px;
+        color:black;
+        text-align: center;
+        line-height: 1em;
+        cursor: pointer;
+    }
+}
+

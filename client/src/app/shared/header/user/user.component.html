@@ -1,0 +1,6 @@
+<div class="user d-flex flex-column justify-content-end  text-end">
+
+        <a (click)="this.toggleLogOut()" type="button" class="">{{userEmail}} <i class="bi bi-chevron-down"></i></a>
+       
+          <button *ngIf="this.showLogOut" (click)="logout()" class="" value="Log Out">Log Out</button>
+      </div>

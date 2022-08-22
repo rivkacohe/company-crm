@@ -1,0 +1,45 @@
+/* You can add global styles to this file, and also import other style files */
+.inputStyle{
+    border: 2px solid rgb(94, 87, 87);
+    border-radius: 4px;
+}
+
+input:disabled{
+background-color: #fff;
+border: none;
+}
+
+input{
+    width: 100%;
+}
+.my-modal{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 14, 14,0.5);
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    div{
+        width: 500px;
+        height: 300px;
+        position: fixed;
+        
+    }
+}
+
+.user{
+    position: relative;
+    width: fit-content;
+    button{
+        width: 100%;
+        position: absolute;
+        left: 0px;
+        right:0px;
+        top:25px;
+        z-index: 1;
+        background-color: #fff;
+    }
+}

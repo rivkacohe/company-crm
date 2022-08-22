@@ -1,0 +1,45 @@
+<div class="container">
+  <form [formGroup]="customerForm" class="row  mb-2">
+    <div class="col"><input type="text" placeholder="first name" formControlName="first_name" form="customersForm"></div>
+    <div class="col"><input type="text" placeholder="last name" formControlName="last_name" form="customersForm"></div>
+    <div class="col"><input type="text" placeholder="phone" formControlName="phone" form="customersForm"></div>
+    <div class="col"><input type="email" placeholder="email" formControlName="email" form="customersForm"></div>
+    <div class="col text-end">
+      <button [disabled]="!customerForm.valid" (click)="onSubmit()" type="submit" class="btn btn-primary me-1 mb-1" 
+        form="cusromersForm">Add Customer</button>
+      </div>
+  </form>
+</div>
+
+
+<div class="container">
+  <div class="row border-bottom border-secondary mb-1 ">
+    <div class="col h6">No.</div>
+    <div class="col h6">First Name</div>
+    <div class="col h6">Last Name</div>
+    <div class="col h6">Phone</div>
+    <div class="col h6">Email</div>
+    <div class="col h6"></div>
+  </div>
+</div>
+
+  <div class="container" *ngFor="let customer of customers">
+    <app-customer-row (addCustomerEvent)="editcustomer($event)" (deleteCustomerEvent)="deleteCustomer($event)" [rowNum]="customers.indexOf(customer)" [customer]="customer">
+    </app-customer-row>
+  </div>
+
+
+  <div *ngIf="this.showNotification" class="my-modal" >
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">You Did It!</h5>
+        <p class="card-text">Customer Added Successfully with the Following detailes:</p>
+        <p class="card-text">name: {{this.currentCustomer.first_name}} {{this.currentCustomer.last_name}}</p>
+        <p class="card-text">phone: {{this.currentCustomer.phone}} </p>
+        <p class="card-text">email: {{this.currentCustomer.email}} </p>
+        <button (click)="toggleMymodal()" class="btn btn-primary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  

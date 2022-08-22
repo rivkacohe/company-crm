@@ -7,11 +7,10 @@ const database = require('./database');
       const reqBody = req.body;
 
       const schema = joi.object({
-        name: joi.string().required().min(2).max(200),
+        first_name: joi.string().required().min(2).max(100),
+        last_name: joi.string().required().min(2).max(100),
         phone: joi.string().required().regex(/^[0-9]\d{8,11}$/),
         email: joi.string().required().regex(/^[^@]+@[^@]+$/),
-        country_id: joi.number().required(),
-    
     })
     
     const {error, value}=  schema.validate(reqBody);
@@ -22,14 +21,14 @@ const database = require('./database');
     }
 
     const sql =
-    "INSERT INTO customers(name, phone, email, country_id)" +
+    "INSERT INTO customers(first_name,last_name, phone, email)" +
     " VALUES(?,?,?,?);";
           
     
             try {    
                 const result = await database.query(
                     sql,
-                [value.name, value.phone, value.email, value.country_id]
+                [value.first_name, value.last_name, value.phone, value.email]
                 );
 
                 value.id =result[0].insertId;
@@ -45,28 +44,7 @@ const database = require('./database');
     
 
     customersList: async function (req, res,next) {
-        const param = req.query; // get method
-        const schema = joi.object({
-        column: joi.string().valid('name', 'email', 'country_name').default('name'),
-        sort: joi.string().valid('ASC', 'DESC').default('ASC'),
-    });
-
-    const { error, value } = schema.validate(param);
-    if (error) {
-        console.log(error);
-        res.status(400).send('add failed');
-        return
-    }
-    const fieldsMap = new Map([
-        ['name', 'customers.name'],
-        ['email', 'customers.email'],
-        ['country_name', 'countries.name'],
-    ]);
-
-    const sql = `SELECT customers.id, customers.name, customers.phone, customers.email,  
-        countries.id AS country_id, countries.name AS country_name, countries.countryCode  
-        FROM customers LEFT JOIN countries ON customers.country_id = countries.id 
-        ORDER BY ${fieldsMap.get(value.column)} ${value.sort};`;
+    const sql = `SELECT * FROM customers;`;
 
         try {
             const result = await database.query(sql);
@@ -81,7 +59,30 @@ const database = require('./database');
    
 
     deleteCustomer: async function(req, res, next) {
+        const schema = joi.object({
+            id: joi.number().required()
+        });
 
+        const { error, value } = schema.validate(req.query);
+
+        if (error) {
+            res.status(400).send('error delete customer');
+            console.log(error.details[0].message);
+            return;
+        }
+
+        const sql = `DELETE FROM customers WHERE id=?`;
+
+        try {
+            const result = await database.query(sql, [value.id]);
+            res.json({
+                id: value.id
+            });
+        }
+        catch (err) {
+            res.status(400).send('error delete customer');
+            console.log(err.message);
+        }
     },
 
     
@@ -123,7 +124,42 @@ const database = require('./database');
 
 
 
-    updateCustomer: async function(req, res, next) {},
+    updateCustomer: async function(req, res, next) {
+        const reqBody = req.body;
+
+        const schema = joi.object({
+            id:joi.number(),
+            first_name: joi.string().min(2).max(100),
+            last_name: joi.string().min(2).max(100),
+            phone: joi.string().required().regex(/^[0-9]\d{8,11}$/),
+            email: joi.string().required().regex(/^[^@]+@[^@]+$/),
+        });
+
+        const { error, value } = schema.validate(reqBody);
+
+        if (error) {
+            res.status(400).send(`error update customer: ${error}`);
+            return;
+        }
+  
+        const keys = Object.keys(value);   
+        const values = Object.values(value); 
+   
+        const fields = keys.map(key => `${key}=?`).join(',');
+        values.push(req.body.id);
+        const sql = `UPDATE customers SET ${fields} WHERE id=?`;
+
+        try {
+            const result = await database.query(sql, values);
+            res.json(value);
+        }
+        catch (err) {
+            console.log(err);
+            return;
+        }
+
+
+    },
 
 
 

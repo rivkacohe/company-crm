@@ -1,0 +1,11 @@
+@import "../common/bootstrap-variables.scss";
+@import "../common/app";
+@import "../common/bootstrap.scss";
+
+.light-theme{
+    background-color: #f5f8ff;
+
+    & {
+        color: #213446;
+    }
+}
